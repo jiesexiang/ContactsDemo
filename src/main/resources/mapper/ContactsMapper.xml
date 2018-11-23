@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.ContactsDao" >
+    <sql id="BASE_TABLE">
+    addressbook
+  </sql>
+
+    <sql id="BASE_COLUMN">
+    id,name,number,remark
+  </sql>
+
+    <insert id="Insert" parameterType="com.example.demo.model.ContactsEntity">
+        INSERT INTO
+        <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Name,Number,Remark
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            #{name, jdbcType=VARCHAR},#{number, jdbcType=VARCHAR},
+            #{remark, jdbcType=VARCHAR}
+        </trim>
+    </insert>
+    <delete id="Delete" parameterType="com.example.demo.model.ContactsEntity">
+        DELETE from <include refid="BASE_TABLE"/>
+        where id = #{id, jdbcType=INTEGER}
+    </delete>
+    <update id="Update" parameterType="com.example.demo.model.ContactsEntity">
+        update <include refid="BASE_TABLE"/>
+        set
+        <if test="name != null and name != ''">
+            name = #{name, jdbcType=VARCHAR}
+        </if>
+        <if test="number != null and number != ''">
+            number = #{number, jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null and remark != ''">
+            remark = #{remark, jdbcType=VARCHAR}
+        </if>
+        where id = #{id, jdbcType=INTEGER}
+    </update>
+    <select id="GetAddressBookList" resultType="com.example.demo.model.ContactsEntity">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM
+        <include refid="BASE_TABLE"/>
+    </select>
+</mapper>
